@@ -10,17 +10,10 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                echo 'Installing Python dependencies...'
-                sh 'pip install -r requirements.txt'
-            }
-        }
-
         stage('Lint / Syntax Check') {
             steps {
                 echo 'Checking Python syntax...'
-                sh 'python -m py_compile app.py'
+                sh 'docker run --rm -v $(pwd):/app python:3.11-slim python -m py_compile /app/app.py'
                 echo 'Syntax OK!'
             }
         }
@@ -41,7 +34,7 @@ pipeline {
                 echo 'Starting new container...'
                 sh 'docker run -d --name event-registration -p 5000:5000 event-registration:latest'
 
-                echo 'App deployed! Running at http://localhost:5000'
+                echo 'App deployed at http://localhost:5000'
             }
         }
     }
