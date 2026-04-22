@@ -10,24 +10,6 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh '''
-                apt update
-                apt install -y python3 python3-pip
-                pip3 install -r requirements.txt
-                '''
-            }
-        }
-
-        stage('Lint / Syntax Check') {
-            steps {
-                echo 'Checking Python syntax...'
-                sh 'python -m py_compile app.py'
-                echo 'Syntax OK!'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
